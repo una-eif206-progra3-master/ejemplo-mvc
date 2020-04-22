@@ -116,4 +116,12 @@ public class StudentController {
         }
         return text;
     }
+
+    public StudentListView getStudentListView() {
+        return studentListView;
+    }
+
+    public void setStudentListView(StudentListView studentListView) {
+        this.studentListView = studentListView;
+    }
 }

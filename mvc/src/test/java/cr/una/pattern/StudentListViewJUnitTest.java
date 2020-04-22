@@ -18,6 +18,7 @@
  */
 package cr.una.pattern;
 
+import cr.una.pattern.controller.StudentController;
 import cr.una.pattern.view.StudentListView;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -48,8 +49,11 @@ public class StudentListViewJUnitTest {
 
     @Before
     public void setUp() {
-        StudentListView view = GuiActionRunner.execute(() -> new StudentListView());
-        window = new FrameFixture(view);
+        StudentController studentController = GuiActionRunner.execute(() ->
+                new StudentController());
+
+        studentController.initController();
+        window = new FrameFixture(studentController.getStudentListView());
         window.show();
         ctrlPanel = window.panel("ctrlPanel");
         splitPanel = window.splitPane("splitPane");
