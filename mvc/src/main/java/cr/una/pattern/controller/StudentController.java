@@ -51,7 +51,7 @@ public class StudentController {
      * Default Constructor
      */
     public StudentController() {
-        logger.debug("Controller Constructor");
+        logger.debug("Design Pattern MVC: [CONTROLLER]");
 
         studentListView = new StudentListView("List of Students (MVC Demo)");
         studentService = new StudentService();
@@ -119,7 +119,7 @@ public class StudentController {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error general al traer datos del Service: ", e);
         }
         return dataVector;
     }

@@ -20,7 +20,10 @@ package cr.una.pattern.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cr.una.pattern.Constants;
+import cr.una.pattern.controller.StudentController;
 import cr.una.pattern.model.Student;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +36,9 @@ import java.util.List;
  * @author mguzmana
  */
 public class StudentService {
+
+    // Using logger for project
+    final Logger logger = LogManager.getLogger(StudentService.class);
 
     /**
      * Empty Constructor
@@ -47,6 +53,8 @@ public class StudentService {
      * @return the list of Students
      */
     public List<Student> searchStudentsByTermFromFile(String searchTerm) throws IOException {
+
+        logger.debug("Obteniendo la lista de estudiantes que coinciden con ["+searchTerm+"]");
 
         List<Student> studentList = loadAllStudentsFromFile();
         List<Student> updatedStudentList = new ArrayList<Student>();
@@ -68,6 +76,9 @@ public class StudentService {
      * @return the list of Students
      */
     public List<Student> loadAllStudentsFromFile() throws IOException {
+
+        logger.debug("Obteniendo toda la lista de estudiantes");
+
         // Library Jackson parse JSon
         // http://wiki.fasterxml.com/JacksonHome
         Student[] students = null;

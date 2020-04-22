@@ -18,6 +18,10 @@
  */
 package cr.una.pattern.view;
 
+import cr.una.pattern.service.StudentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -39,14 +43,16 @@ public class StudentListView extends JFrame {
 
     /**
      * Main Constructor
-     *
-     * @throws com.fasterxml.jackson.core.JsonGenerationException
-     * @throws com.fasterxml.jackson.databind.JsonMappingException
-     * @throws java.io.IOException
+     * @param titleView the name of the View
      */
     public StudentListView(String titleView) {
-        
+
         super(titleView);
+
+        // Using logger for project
+        final Logger logger = LogManager.getLogger(StudentListView.class);
+
+        logger.debug("Design Pattern MVC: [VIEW]");
 
         searchTermTextField = new JTextField(26);
         filterButton = new JButton("Filter");

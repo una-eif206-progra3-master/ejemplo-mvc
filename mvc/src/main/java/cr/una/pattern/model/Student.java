@@ -19,6 +19,9 @@
 package cr.una.pattern.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cr.una.pattern.service.StudentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Student Model
@@ -26,6 +29,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author mguzmana
  */
 public class Student {
+
+    // Using logger for project
+    final Logger logger = LogManager.getLogger(Student.class);
 
     @JsonProperty("_id")
     private Id id;
@@ -40,6 +46,7 @@ public class Student {
      *
      */
     public Student() {
+        logger.debug("Design Pattern MVC: [MODEL]");
     }
 
     /**
