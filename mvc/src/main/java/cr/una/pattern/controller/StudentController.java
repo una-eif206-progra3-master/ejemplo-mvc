@@ -13,19 +13,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Universidad Nacional de Costa Rica, Prof: Maikol Guzman Alan.
  */
 package cr.una.pattern.controller;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
 
 import cr.una.pattern.Constants;
 import cr.una.pattern.model.Student;
 import cr.una.pattern.service.StudentService;
 import cr.una.pattern.view.StudentListView;
+
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Student Controller
@@ -42,7 +41,7 @@ public class StudentController {
     private StudentService studentService;
 
     /**
-     * Default Contructor
+     * Default Constructor
      */
     public StudentController() {
         studentListView = new StudentListView("List of Students (MVC Demo)");
@@ -57,11 +56,12 @@ public class StudentController {
         dataVector = loadDataFromService("");
         studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
 
-        studentListView.getFilterButton().addActionListener( e -> searchText());
+        studentListView.getFilterButton().addActionListener(e -> searchText());
     }
 
     /**
      * Method to filter the data from the service depending of the search value
+     * As soon the user click the button search
      */
     private void searchText() {
         String searchTerm = studentListView.getSearchTermTextField().getText();
@@ -72,6 +72,7 @@ public class StudentController {
 
     /**
      * Method to load data from the service
+     *
      * @param searchTerm filter the data with this term
      * @return vector of students
      */
@@ -86,7 +87,7 @@ public class StudentController {
         }
 
         if (listStudentModel != null && listStudentModel.size() > 0) {
-            int index=0;
+            int index = 0;
             Vector studentVector = null;
             for (Student student : listStudentModel) {
                 studentVector = new Vector();
@@ -104,6 +105,7 @@ public class StudentController {
 
     /**
      * Check if the value is null
+     *
      * @param obj the value
      * @return Empty value if it's null
      */

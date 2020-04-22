@@ -18,16 +18,14 @@
  */
 package cr.una.pattern.service;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cr.una.pattern.Constants;
+import cr.una.pattern.model.Student;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import cr.una.pattern.Constants;
-import cr.una.pattern.model.Student;
 
 /**
  * Service to get the data from the service

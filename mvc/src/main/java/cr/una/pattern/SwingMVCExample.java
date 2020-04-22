@@ -20,11 +20,10 @@ package cr.una.pattern;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import java.io.IOException;
-import javax.swing.SwingUtilities;
-
 import cr.una.pattern.controller.StudentController;
-import cr.una.pattern.view.StudentListView;
+
+import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Swing MVC Example
