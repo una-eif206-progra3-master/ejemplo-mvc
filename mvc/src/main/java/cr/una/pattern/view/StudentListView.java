@@ -41,12 +41,13 @@ import cr.una.pattern.controller.StudentController;
  * @author mguzmana
  */
 public class StudentListView extends JFrame {
-    // Create views swing UI components 
+    // Create views swing UI components
 
-    JTextField searchTermTextField = new JTextField(26);
-    JButton filterButton = new JButton("Filter");
-    JTable table = new JTable();
-    DefaultTableModel tableModel = new DefaultTableModel();
+    private String titleView;
+    private JTextField searchTermTextField;
+    private JButton filterButton;
+    private JTable table;
+    private DefaultTableModel tableModel;
 
     /**
      * Main Constructor
@@ -55,10 +56,14 @@ public class StudentListView extends JFrame {
      * @throws com.fasterxml.jackson.databind.JsonMappingException
      * @throws java.io.IOException
      */
-    public StudentListView() throws JsonGenerationException,
-            JsonMappingException, IOException {
+    public StudentListView(String titleView) {
         
-        super("List of Students (MVC Demo)");
+        super(titleView);
+
+        searchTermTextField = new JTextField(26);
+        filterButton = new JButton("Filter");
+        table = new JTable();
+        tableModel = new DefaultTableModel();
         
         searchTermTextField.setName("txtSearch");
         filterButton.setName("btnFilter");
@@ -66,10 +71,6 @@ public class StudentListView extends JFrame {
         // Create table model
         table.setName("mainTable");
         table.setModel(tableModel);
-
-        // Create controller
-        StudentController controller = new StudentController(searchTermTextField, tableModel);
-        filterButton.addActionListener(controller);
 
         // Set the view layout
         JPanel ctrlPane = new JPanel();
@@ -95,5 +96,45 @@ public class StudentListView extends JFrame {
         
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public String getTitleView() {
+        return titleView;
+    }
+
+    public void setTitleView(String titleView) {
+        this.titleView = titleView;
+    }
+
+    public JTextField getSearchTermTextField() {
+        return searchTermTextField;
+    }
+
+    public void setSearchTermTextField(JTextField searchTermTextField) {
+        this.searchTermTextField = searchTermTextField;
+    }
+
+    public JButton getFilterButton() {
+        return filterButton;
+    }
+
+    public void setFilterButton(JButton filterButton) {
+        this.filterButton = filterButton;
+    }
+
+    public JTable getTable() {
+        return table;
+    }
+
+    public void setTable(JTable table) {
+        this.table = table;
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
     }
 }

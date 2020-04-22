@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import cr.una.pattern.Constants;
 import cr.una.pattern.model.Student;
 
@@ -39,56 +42,44 @@ public class StudentService {
     public StudentService() {
     }
 
-    /**
-     * Wrapper to return the list of students from the File
-     *
-     * @return Object[][] data
-     * @throws com.fasterxml.jackson.core.JsonGenerationException
-     * @throws com.fasterxml.jackson.databind.JsonMappingException
-     * @throws java.io.IOException
-     */
-    public Object[][] loadStudentsObjWrapper() throws JsonGenerationException,
-            JsonMappingException, IOException {
-        Student[] students = loadStudentsFromFile();
-        Object[][] data = null;
+    public List<Student> searchStudentsByTermFromFile(String searchTerm) {
 
-        if (students != null && students.length > 0) {
-            data = new Object[students.length][4]; // filas y columnas
-            int i = 0;
-            for (Student student : students) {
-                data[i][0] = checkIfNull(student.getId().get$oid());
-                data[i][1] = checkIfNull(student.getName());
-                data[i][2] = checkIfNull(student.getCourse());
-                data[i][3] = checkIfNull(student.getRating());
-                i++;
+        List<Student> studentList = loadAllStudentsFromFile();
+        List<Student> updatedStudentList = new ArrayList<Student>();
+
+        if (studentList != null && studentList.size() > 0) {
+            for (Student student : studentList) {
+                if (searchTerm != null && student.getName().equals(searchTerm)) {
+                    updatedStudentList.add(student);
+                }
             }
         }
 
-        return data;
+        return updatedStudentList;
     }
 
-    private Student[] loadStudentsFromFile() throws JsonGenerationException,
-            JsonMappingException, IOException {
+    public List<Student> loadAllStudentsFromFile() {
         // Library Jackson parse JSon
         // http://wiki.fasterxml.com/JacksonHome
         Student[] students = null;
+        List<Student> studentList = null;
 
         ObjectMapper mapper = new ObjectMapper();
         // Convert JSON string from file to Object
-        students = mapper.readValue(new File(
-                getClass().getClassLoader().getResource(Constants.FILENAME).getFile()
-                ), Student[].class);
-
-        return students;
-    }
-
-    private String checkIfNull(Object obj) {
-        String text;
-        if (obj == null) {
-            text = "";
-        } else {
-            text = obj.toString();
+        try {
+            students = mapper.readValue(new File(
+                    getClass().getClassLoader().getResource(Constants.FILENAME).getFile()
+                    ), Student[].class);
+            if (students != null && students.length > 0) {
+                studentList = new ArrayList<Student>();
+                for (Student student: students) {
+                    studentList.add(student);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return text;
+
+        return studentList;
     }
 }

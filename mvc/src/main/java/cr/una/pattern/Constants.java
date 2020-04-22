@@ -18,6 +18,9 @@
  */
 package cr.una.pattern;
 
+import java.util.Arrays;
+import java.util.Vector;
+
 /**
  *
  * @author mguzmana
@@ -32,5 +35,6 @@ public class Constants {
     /**
      *
      */
-    public static final Object[] TABLE_HEADER = {"Id", "Name", "Course", "Rating"};
+    public static final Vector<String> TABLE_HEADER = new Vector(
+            Arrays.asList(new String[]{"Id", "Name", "Course", "Rating"}));
 }

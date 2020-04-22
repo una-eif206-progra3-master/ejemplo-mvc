@@ -22,6 +22,8 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
+
+import cr.una.pattern.controller.StudentController;
 import cr.una.pattern.view.StudentListView;
 
 /**
@@ -60,6 +62,8 @@ public class SwingMVCExample {
      * @throws Exception
      */
     public static void createAndShowGUI() throws Exception {
-        StudentListView studentListView = new StudentListView();
+        //StudentListView studentListView = new StudentListView();
+        StudentController studentController = new StudentController();
+        studentController.initController();
     }
 }

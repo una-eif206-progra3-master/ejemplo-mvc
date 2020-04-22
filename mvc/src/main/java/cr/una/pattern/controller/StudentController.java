@@ -23,76 +23,85 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import cr.una.pattern.Constants;
+import cr.una.pattern.model.Student;
 import cr.una.pattern.service.StudentService;
+import cr.una.pattern.view.StudentListView;
 
 /**
  * Student Controller
  *
  * @author mguzmana
  */
-public class StudentController implements ActionListener {
+public class StudentController {
 
-    private JTextField searchTermTextField = new JTextField(26);
-    private DefaultTableModel tableModel;
+    private List<Student> listStudentModel;
+    private StudentListView studentListView;
     private StudentService studentService;
-    private Object[][] students;
+
+
+    private Vector dataVector;
 
     /**
-     * Main Constructor
-     *
-     * @param searchTermTextField
-     * @param tableModel
-     * 
-     * @throws com.fasterxml.jackson.core.JsonGenerationException
-     * @throws com.fasterxml.jackson.databind.JsonMappingException
-     * @throws java.io.IOException
+     * Default Contructor
      */
-    public StudentController(JTextField searchTermTextField,
-            DefaultTableModel tableModel) throws JsonGenerationException,
-            JsonMappingException, IOException {
-        super();
+    public StudentController() {
+        studentListView = new StudentListView("List of Students (MVC Demo)");
         studentService = new StudentService();
-        students = studentService.loadStudentsObjWrapper();
-
-        this.searchTermTextField = searchTermTextField;
-        this.tableModel = tableModel;
-
-        // Load the table with the list of students
-        tableModel.setDataVector(students, Constants.TABLE_HEADER);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String searchTerm = searchTermTextField.getText();
+    /**
+     * Public method to init the controller
+     *
+     * @throws IOException
+     */
+    public void initController() {
+        listStudentModel = studentService.loadAllStudentsFromFile();
+        dataVector = convertModelToVector(listStudentModel);
 
-        //Method to search items
-        updateTableSearchTerms(searchTerm);
+        studentListView.getFilterButton().addActionListener( e -> searchText());
+        studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
     }
 
-    private void updateTableSearchTerms(String searchTerm) {
-        if (searchTerm != null && !"".equals(searchTerm)
-                && students != null && students.length > 1) {
-            Object[][] newData = new Object[students.length][];
-            int idx = 0;
-            for (Object[] obj : students) {
-                String fullText = obj[0].toString() + obj[1].toString()
-                        + obj[2].toString() + obj[3].toString();
+    /**
+     * Method to search a term inside the table
+     */
+    private void searchText() {
+        String searchTerm = studentListView.getSearchTermTextField().getText();
+        listStudentModel = studentService.searchStudentsByTermFromFile(searchTerm);
+        dataVector = convertModelToVector(listStudentModel);
+        studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
+    }
 
-                if (fullText.contains(searchTerm.trim())) {
-                    newData[idx++] = obj;
-                }
+    public Vector convertModelToVector(List<Student> listStudentModel) {
+        Vector dataVector = new Vector();
+
+        if (listStudentModel != null && listStudentModel.size() > 0) {
+            int index=0;
+            for (Student student : listStudentModel) {
+                dataVector.add(index, checkIfNull(student.getId().get$oid()));
+                dataVector.add(index, checkIfNull(student.getName()));
+                dataVector.add(index, checkIfNull(student.getCourse()));
+                dataVector.add(index, checkIfNull(student.getRating()));
+                index++;
             }
-            tableModel.setDataVector(newData, Constants.TABLE_HEADER);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Search term is empty", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            tableModel.setDataVector(students, Constants.TABLE_HEADER);
         }
+
+        return dataVector;
     }
 
+    private String checkIfNull(Object obj) {
+        String text;
+        if (obj == null) {
+            text = "";
+        } else {
+            text = obj.toString();
+        }
+        return text;
+    }
 }
