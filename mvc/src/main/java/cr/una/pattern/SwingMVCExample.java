@@ -62,7 +62,6 @@ public class SwingMVCExample {
      * @throws Exception
      */
     public static void createAndShowGUI() throws Exception {
-        //StudentListView studentListView = new StudentListView();
         StudentController studentController = new StudentController();
         studentController.initController();
     }

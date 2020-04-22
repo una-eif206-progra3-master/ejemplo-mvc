@@ -42,6 +42,11 @@ public class StudentService {
     public StudentService() {
     }
 
+    /**
+     * This method will load the information from JSON depending if the filter text
+     * @param searchTerm filter term
+     * @return the list of Students
+     */
     public List<Student> searchStudentsByTermFromFile(String searchTerm) {
 
         List<Student> studentList = loadAllStudentsFromFile();
@@ -58,6 +63,10 @@ public class StudentService {
         return updatedStudentList;
     }
 
+    /**
+     * This method will load all the data from the JSON
+     * @return the list of Students
+     */
     public List<Student> loadAllStudentsFromFile() {
         // Library Jackson parse JSon
         // http://wiki.fasterxml.com/JacksonHome

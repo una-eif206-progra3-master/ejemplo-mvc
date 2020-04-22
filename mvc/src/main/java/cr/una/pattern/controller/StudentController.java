@@ -18,16 +18,10 @@
  */
 package cr.una.pattern.controller;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+
 import cr.una.pattern.Constants;
 import cr.una.pattern.model.Student;
 import cr.una.pattern.service.StudentService;
@@ -40,12 +34,12 @@ import cr.una.pattern.view.StudentListView;
  */
 public class StudentController {
 
+    // Student Model
     private List<Student> listStudentModel;
+    // Student List View
     private StudentListView studentListView;
+    // Student Service
     private StudentService studentService;
-
-
-    private Vector dataVector;
 
     /**
      * Default Contructor
@@ -57,44 +51,62 @@ public class StudentController {
 
     /**
      * Public method to init the controller
-     *
-     * @throws IOException
      */
     public void initController() {
-        listStudentModel = studentService.loadAllStudentsFromFile();
-        dataVector = convertModelToVector(listStudentModel);
+        Vector dataVector;
+        dataVector = loadDataFromService("");
+        studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
 
         studentListView.getFilterButton().addActionListener( e -> searchText());
+    }
+
+    /**
+     * Method to filter the data from the service depending of the search value
+     */
+    private void searchText() {
+        String searchTerm = studentListView.getSearchTermTextField().getText();
+        Vector dataVector;
+        dataVector = loadDataFromService(searchTerm);
         studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
     }
 
     /**
-     * Method to search a term inside the table
+     * Method to load data from the service
+     * @param searchTerm filter the data with this term
+     * @return vector of students
      */
-    private void searchText() {
-        String searchTerm = studentListView.getSearchTermTextField().getText();
-        listStudentModel = studentService.searchStudentsByTermFromFile(searchTerm);
-        dataVector = convertModelToVector(listStudentModel);
-        studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
-    }
+    private Vector loadDataFromService(String searchTerm) {
 
-    public Vector convertModelToVector(List<Student> listStudentModel) {
         Vector dataVector = new Vector();
+
+        if (!"".equals(searchTerm) && searchTerm.length() > 0) {
+            listStudentModel = studentService.searchStudentsByTermFromFile(searchTerm);
+        } else {
+            listStudentModel = studentService.loadAllStudentsFromFile();
+        }
 
         if (listStudentModel != null && listStudentModel.size() > 0) {
             int index=0;
+            Vector studentVector = null;
             for (Student student : listStudentModel) {
-                dataVector.add(index, checkIfNull(student.getId().get$oid()));
-                dataVector.add(index, checkIfNull(student.getName()));
-                dataVector.add(index, checkIfNull(student.getCourse()));
-                dataVector.add(index, checkIfNull(student.getRating()));
-                index++;
+                studentVector = new Vector();
+                studentVector.add(checkIfNull(student.getId().get$oid()));
+                studentVector.add(checkIfNull(student.getName()));
+                studentVector.add(checkIfNull(student.getCourse()));
+                studentVector.add(checkIfNull(student.getRating()));
+
+                dataVector.add(studentVector);
             }
         }
 
         return dataVector;
     }
 
+    /**
+     * Check if the value is null
+     * @param obj the value
+     * @return Empty value if it's null
+     */
     private String checkIfNull(Object obj) {
         String text;
         if (obj == null) {
