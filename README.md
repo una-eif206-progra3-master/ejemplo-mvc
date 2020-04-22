@@ -8,3 +8,9 @@ El patrón MVC tiene los tres siguientes componentes:
 - Vista que se usa para presentar datos al usuario
 - Controlador que acepta la entrada del usuario y la convierte en datos para el Modelo o la Vista.
 
+## Diagrama MVC del ejemplo
+
+![MVC-diagrama](MVC-diagrama.png)
+
+El modelo recibe los datos del controlador. Almacena estos datos y actualiza la Vista. La vista permite presentar los datos proporcionados por el modelo al usuario. El Controlador acepta entradas del usuario y las convierte en comandos para el Modelo o la Vista.
+
