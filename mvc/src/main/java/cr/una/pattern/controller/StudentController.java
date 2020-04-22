@@ -22,7 +22,11 @@ import cr.una.pattern.Constants;
 import cr.una.pattern.model.Student;
 import cr.una.pattern.service.StudentService;
 import cr.una.pattern.view.StudentListView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,6 +36,9 @@ import java.util.Vector;
  * @author mguzmana
  */
 public class StudentController {
+
+    // Using logger for project
+    final Logger logger = LogManager.getLogger(StudentController.class);
 
     // Student Model
     private List<Student> listStudentModel;
@@ -44,6 +51,8 @@ public class StudentController {
      * Default Constructor
      */
     public StudentController() {
+        logger.debug("Controller Constructor");
+
         studentListView = new StudentListView("List of Students (MVC Demo)");
         studentService = new StudentService();
     }
@@ -52,10 +61,13 @@ public class StudentController {
      * Public method to init the controller
      */
     public void initController() {
+        logger.debug("Controller Init");
+
         Vector dataVector;
         dataVector = loadDataFromService("");
         studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
 
+        // Different ways to implement the action performed
         studentListView.getFilterButton().addActionListener(e -> searchText());
     }
 
@@ -66,7 +78,12 @@ public class StudentController {
     private void searchText() {
         String searchTerm = studentListView.getSearchTermTextField().getText();
         Vector dataVector;
+        logger.debug("Searching the information of: " + searchTerm);
+
         dataVector = loadDataFromService(searchTerm);
+
+        logger.debug("Data found: " + dataVector.size());
+
         studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
     }
 
@@ -80,26 +97,30 @@ public class StudentController {
 
         Vector dataVector = new Vector();
 
-        if (!"".equals(searchTerm) && searchTerm.length() > 0) {
-            listStudentModel = studentService.searchStudentsByTermFromFile(searchTerm);
-        } else {
-            listStudentModel = studentService.loadAllStudentsFromFile();
-        }
+        try {
+            if (!"".equals(searchTerm) && searchTerm.length() > 0) {
+                listStudentModel = studentService.searchStudentsByTermFromFile(searchTerm);
 
-        if (listStudentModel != null && listStudentModel.size() > 0) {
-            int index = 0;
-            Vector studentVector = null;
-            for (Student student : listStudentModel) {
-                studentVector = new Vector();
-                studentVector.add(checkIfNull(student.getId().get$oid()));
-                studentVector.add(checkIfNull(student.getName()));
-                studentVector.add(checkIfNull(student.getCourse()));
-                studentVector.add(checkIfNull(student.getRating()));
-
-                dataVector.add(studentVector);
+            } else {
+                listStudentModel = studentService.loadAllStudentsFromFile();
             }
-        }
 
+            if (listStudentModel != null && listStudentModel.size() > 0) {
+                int index = 0;
+                Vector studentVector = null;
+                for (Student student : listStudentModel) {
+                    studentVector = new Vector();
+                    studentVector.add(checkIfNull(student.getId().get$oid()));
+                    studentVector.add(checkIfNull(student.getName()));
+                    studentVector.add(checkIfNull(student.getCourse()));
+                    studentVector.add(checkIfNull(student.getRating()));
+
+                    dataVector.add(studentVector);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return dataVector;
     }
 
@@ -126,4 +147,5 @@ public class StudentController {
     public void setStudentListView(StudentListView studentListView) {
         this.studentListView = studentListView;
     }
+
 }

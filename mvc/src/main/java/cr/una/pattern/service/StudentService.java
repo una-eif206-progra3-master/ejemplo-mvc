@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Universidad Nacional de Costa Rica, Prof: Maikol Guzman Alan.
  */
 package cr.una.pattern.service;
@@ -42,10 +42,11 @@ public class StudentService {
 
     /**
      * This method will load the information from JSON depending if the filter text
+     *
      * @param searchTerm filter term
      * @return the list of Students
      */
-    public List<Student> searchStudentsByTermFromFile(String searchTerm) {
+    public List<Student> searchStudentsByTermFromFile(String searchTerm) throws IOException {
 
         List<Student> studentList = loadAllStudentsFromFile();
         List<Student> updatedStudentList = new ArrayList<Student>();
@@ -63,9 +64,10 @@ public class StudentService {
 
     /**
      * This method will load all the data from the JSON
+     *
      * @return the list of Students
      */
-    public List<Student> loadAllStudentsFromFile() {
+    public List<Student> loadAllStudentsFromFile() throws IOException {
         // Library Jackson parse JSon
         // http://wiki.fasterxml.com/JacksonHome
         Student[] students = null;
@@ -73,18 +75,14 @@ public class StudentService {
 
         ObjectMapper mapper = new ObjectMapper();
         // Convert JSON string from file to Object
-        try {
-            students = mapper.readValue(new File(
-                    getClass().getClassLoader().getResource(Constants.FILENAME).getFile()
-                    ), Student[].class);
-            if (students != null && students.length > 0) {
-                studentList = new ArrayList<Student>();
-                for (Student student: students) {
-                    studentList.add(student);
-                }
+        students = mapper.readValue(new File(
+                getClass().getClassLoader().getResource(Constants.FILENAME).getFile()
+        ), Student[].class);
+        if (students != null && students.length > 0) {
+            studentList = new ArrayList<Student>();
+            for (Student student : students) {
+                studentList.add(student);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return studentList;
