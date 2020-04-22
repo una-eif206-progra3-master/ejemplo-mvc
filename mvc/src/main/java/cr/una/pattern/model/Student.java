@@ -19,7 +19,6 @@
 package cr.una.pattern.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import cr.una.pattern.service.StudentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

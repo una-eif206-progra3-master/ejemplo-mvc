@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,21 +81,13 @@ public class StudentService {
         logger.debug("Obteniendo toda la lista de estudiantes");
 
         // Library Jackson parse JSon
-        // http://wiki.fasterxml.com/JacksonHome
-        Student[] students = null;
         List<Student> studentList = null;
 
         ObjectMapper mapper = new ObjectMapper();
         // Convert JSON string from file to Object
-        students = mapper.readValue(new File(
+        studentList = Arrays.asList(mapper.readValue(new File(
                 getClass().getClassLoader().getResource(Constants.FILENAME).getFile()
-        ), Student[].class);
-        if (students != null && students.length > 0) {
-            studentList = new ArrayList<Student>();
-            for (Student student : students) {
-                studentList.add(student);
-            }
-        }
+        ), Student[].class));
 
         return studentList;
     }
