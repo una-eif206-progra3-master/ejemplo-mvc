@@ -46,6 +46,8 @@ public class StudentController {
     private StudentListView studentListView;
     // Student Service
     private StudentService studentService;
+    // Vector for the Data Table
+    private Vector<Vector<String>> dataVector;
 
     /**
      * Default Constructor
@@ -63,7 +65,6 @@ public class StudentController {
     public void initController() {
         logger.debug("Controller Init");
 
-        Vector dataVector;
         dataVector = loadDataFromService("");
         studentListView.getTableModel().setDataVector(dataVector, Constants.TABLE_HEADER);
 
@@ -77,7 +78,6 @@ public class StudentController {
      */
     private void searchText() {
         String searchTerm = studentListView.getSearchTermTextField().getText();
-        Vector dataVector;
         logger.debug("Searching the information of: " + searchTerm);
 
         dataVector = loadDataFromService(searchTerm);
@@ -93,9 +93,9 @@ public class StudentController {
      * @param searchTerm filter the data with this term
      * @return vector of students
      */
-    private Vector loadDataFromService(String searchTerm) {
+    private Vector<Vector<String>> loadDataFromService(String searchTerm) {
 
-        Vector dataVector = new Vector();
+        dataVector = new Vector();
 
         try {
             if (!"".equals(searchTerm) && searchTerm.length() > 0) {
@@ -107,7 +107,7 @@ public class StudentController {
 
             if (listStudentModel != null && listStudentModel.size() > 0) {
                 int index = 0;
-                Vector studentVector = null;
+                Vector<String> studentVector = null;
                 for (Student student : listStudentModel) {
                     studentVector = new Vector();
                     studentVector.add(checkIfNull(student.getId().get$oid()));
